@@ -1,0 +1,21 @@
+node_modules
+dist
+coverage
+npm-debug.log*
+
+# git / infra
+.git
+.gitignore
+Dockerfile
+.dockerignore
+
+# dev / editor
+.vscode
+.idea
+*.log
+.env
+.env.*
+
+# testes e config que não entram na imagem final
+test
+*.spec.ts
