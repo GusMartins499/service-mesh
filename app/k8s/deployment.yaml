@@ -14,10 +14,12 @@ spec:
   selector:
     matchLabels:
       app: app-service-mesh
+      version: V1
   template:
     metadata:
       labels:
         app: app-service-mesh
+        version: V1
     spec:
       containers:
         - name: app-service-mesh

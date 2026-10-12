@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: app-service-mesh-v2
+
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 10%
+  selector:
+    matchLabels:
+      app: app-service-mesh
+      version: V2
+  template:
+    metadata:
+      labels:
+        app: app-service-mesh
+        version: V2
+    spec:
+      containers:
+        - name: app-service-mesh
+          image: gusmartins499/service-mesh:v2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 200m
+              memory: 128Mi
+            limits:
+              cpu: 400m
+              memory: 256Mi
