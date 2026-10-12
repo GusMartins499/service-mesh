@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+
+metadata:
+  name: app-service-mesh-dr
+
+spec:
+  host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+    - name: V1
+      labels:
+        version: V1
+      trafficPolicy:
+        loadBalancer:
+          simple: LEAST_CONN
+    - name: V2
+      labels:
+        version: V2
