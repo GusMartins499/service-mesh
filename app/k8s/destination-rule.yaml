@@ -7,6 +7,11 @@ metadata:
 spec:
   host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
   trafficPolicy:
+    outlierDetection:
+      consecutiveGatewayErrors: 1
+      interval: 1s
+      baseEjectionTime: 120s
+      maxEjectionPercent: 100
     loadBalancer:
       simple: RANDOM
   subsets:

@@ -16,7 +16,7 @@ spec:
         abort:
           httpStatus: 504
           percentage:
-            value: 5
+            value: 50
       route:
         - destination:
             host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
