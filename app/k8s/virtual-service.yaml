@@ -9,18 +9,22 @@ spec:
     - app-service-mesh-svc.app-service-mesh.svc.cluster.local
   http:
     - fault:
-        # delay:
-        #   fixedDelay: 1s
-        #   percentage:
-        #     value: 5
-        abort:
-          httpStatus: 504
+        delay:
+          fixedDelay: 1s
           percentage:
-            value: 50
+            value: 5
+        # abort:
+        #   httpStatus: 504
+        #   percentage:
+        #     value: 50
       route:
         - destination:
             host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
             subset: V1
+      retries:
+        attempts: 3
+        perTryTimeout: 1s
+      timeout: 0.2s
     # ex: regras de roteamento
     # - name: app-service-mesh-v2
     #   match:
