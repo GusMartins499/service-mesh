@@ -8,23 +8,23 @@ spec:
   hosts:
     - app-service-mesh-svc.app-service-mesh.svc.cluster.local
   http:
-    - fault:
-        delay:
-          fixedDelay: 1s
-          percentage:
-            value: 5
-        # abort:
-        #   httpStatus: 504
-        #   percentage:
-        #     value: 50
-      route:
-        - destination:
-            host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
-            subset: V1
-      retries:
-        attempts: 3
-        perTryTimeout: 1s
-      timeout: 0.2s
+    # - fault:
+    #     delay:
+    #       fixedDelay: 1s
+    #       percentage:
+    #         value: 5
+    #     # abort:
+    #     #   httpStatus: 504
+    #     #   percentage:
+    #     #     value: 50
+    #   route:
+    #     - destination:
+    #         host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
+    #         subset: V1
+    #   retries:
+    #     attempts: 3
+    #     perTryTimeout: 1s
+    #   timeout: 0.2s
     # ex: regras de roteamento
     # - name: app-service-mesh-v2
     #   match:
@@ -44,12 +44,19 @@ spec:
     #         host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
     #         subset: V1
     # exemplo de canary/split
-    # - route:
-    #     - destination:
-    #         host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
-    #         subset: V1
-    #       weight: 50
-    #     - destination:
-    #         host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
-    #         subset: V2
-    #       weight: 50
+    - name: app-service-mesh-v2
+      match:
+        - queryParams:
+            testeab:
+              exact: "true"
+      route:
+        - destination:
+            host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
+            subset: V2
+          # weight: 50
+    - name: app-service-mesh-v1
+      route:
+        - destination:
+            host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
+            subset: V1
+          # weight: 50

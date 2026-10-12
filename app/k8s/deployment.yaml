@@ -5,7 +5,7 @@ metadata:
   name: app-service-mesh
 
 spec:
-  replicas: 3
+  replicas: 4
   strategy:
     type: RollingUpdate
     rollingUpdate:
