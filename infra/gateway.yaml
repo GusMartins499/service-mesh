@@ -1,0 +1,31 @@
+# Waypoint proxy do namespace da aplicação.
+#
+# Um waypoint é um Envoy compartilhado, criado pelo Istio a partir deste
+# Gateway, que recebe o tráfego L7 dos pods do namespace. É ele que aplica
+# VirtualService, DestinationRule, retries, timeouts e fault injection —
+# papel que, no modo sidecar, era de cada istio-proxy.
+#
+# O nome "waypoint" precisa bater com o label istio.io/use-waypoint do
+# namespace (infra/app-ns.yaml).
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+
+metadata:
+  name: waypoint
+  # O waypoint atende o namespace em que é criado.
+  namespace: app-service-mesh
+
+spec:
+  # Classe do Istio que transforma o Gateway em waypoint (e não em ingress).
+  gatewayClassName: istio-waypoint
+  listeners:
+    # O ztunnel entrega o tráfego ao waypoint por um túnel HBONE
+    # (HTTP-Based Overlay Network Environment: HTTP/2 CONNECT sobre mTLS)
+    # na porta 15008, a porta padrão do Istio para esse protocolo.
+    - name: mesh
+      port: 15008
+      protocol: HBONE
+      allowedRoutes:
+        namespaces:
+          # Só aceita rotas do próprio namespace.
+          from: Same

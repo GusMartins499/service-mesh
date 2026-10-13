@@ -1,15 +1,25 @@
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
+# Gateway de entrada (north-south) desativado.
+#
+# Com o Istio em modo ambient, quem processa o tráfego L7 entre os serviços
+# (east-west) é o waypoint proxy, definido em infra/gateway.yaml. Este Gateway
+# de borda, que expunha a aplicação na porta 80 via HTTP, fica comentado para
+# referência.
+#
+# O HTTPRoute em route.yaml, que apontava para este Gateway, também foi
+# comentado.
 
-metadata:
-  name: app-service-mesh-gateway
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: Gateway
 
-spec:
-  gatewayClassName: istio
-  listeners:
-    - name: http
-      port: 80
-      protocol: HTTP
-      allowedRoutes:
-        namespaces:
-          from: Same
+# metadata:
+#   name: app-service-mesh-gateway
+
+# spec:
+#   gatewayClassName: istio
+#   listeners:
+#     - name: http
+#       port: 80
+#       protocol: HTTP
+#       allowedRoutes:
+#         namespaces:
+#           from: Same

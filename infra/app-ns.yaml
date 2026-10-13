@@ -1,0 +1,22 @@
+# Namespace da aplicação no modo ambient do Istio.
+#
+# No modo ambient não existe sidecar: o pod não ganha um container istio-proxy.
+# O tráfego é capturado por um proxy por nó (ztunnel), que cuida da camada L4
+# (mTLS, identidade, telemetria básica). Recursos L7 (retries, fault injection,
+# roteamento por header/query param) ficam a cargo de um waypoint proxy.
+#
+# Por isso este namespace NÃO usa o label istio-injection=enabled — os dois
+# modos não devem ser misturados no mesmo namespace.
+apiVersion: v1
+kind: Namespace
+
+metadata:
+  labels:
+    # Coloca todos os pods do namespace na malha ambient (ztunnel).
+    istio.io/dataplane-mode: ambient
+    # Encaminha o tráfego L7 do namespace pelo waypoint chamado "waypoint",
+    # definido em infra/gateway.yaml.
+    istio.io/use-waypoint: waypoint
+  # Mesmo nome usado nos hosts da DestinationRule e do VirtualService
+  # (app-service-mesh-svc.app-service-mesh.svc.cluster.local).
+  name: app-service-mesh

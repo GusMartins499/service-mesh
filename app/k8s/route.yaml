@@ -1,20 +1,37 @@
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+# HTTPRoute desativado junto com o Gateway de entrada (gateway.yaml).
+#
+# Esta rota expunha /healthz e /readyz pelo app-service-mesh-gateway. Com o
+# Gateway comentado, o parentRef não aponta para nada e a rota não teria efeito.
+#
+# Por que não apontar a rota para o waypoint?
+# No modo ambient, um HTTPRoute aplicado ao waypoint usa como parentRef o
+# próprio Service (kind: Service, name: app-service-mesh-svc). Isso faria a
+# rota valer para TODO o tráfego do Service e entraria em conflito com o
+# VirtualService (virtual-service.yaml), que já define o roteamento A/B entre
+# V1 e V2 — o Istio não suporta os dois configurando o mesmo host. Além disso,
+# requisições que não casassem com /healthz ou /readyz passariam a receber 404.
+#
+# Dentro da malha os endpoints continuam acessíveis direto pelo Service:
+#   http://app-service-mesh-svc/healthz
+#   http://app-service-mesh-svc/readyz
 
-metadata:
-  name: app-service-mesh-route
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: HTTPRoute
 
-spec:
-  parentRefs:
-    - name: app-service-mesh-gateway
-  rules:
-    - matches:
-        - path:
-            type: Exact
-            value: /healthz
-        - path:
-            type: Exact
-            value: /readyz
-      backendRefs:
-        - name: app-service-mesh-svc
-          port: 80
+# metadata:
+#   name: app-service-mesh-route
+
+# spec:
+#   parentRefs:
+#     - name: app-service-mesh-gateway
+#   rules:
+#     - matches:
+#         - path:
+#             type: Exact
+#             value: /healthz
+#         - path:
+#             type: Exact
+#             value: /readyz
+#       backendRefs:
+#         - name: app-service-mesh-svc
+#           port: 80
