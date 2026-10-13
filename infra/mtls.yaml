@@ -1,0 +1,16 @@
+# mTLS obrigatório para toda a malha.
+#
+# Um PeerAuthentication criado no namespace raiz do Istio (istio-system) vale
+# para o cluster inteiro, não só para um namespace. Com mode: STRICT, os
+# workloads da malha só aceitam conexões com mTLS — tráfego em texto puro é
+# recusado.
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+
+metadata:
+  name: mtls-default
+  namespace: istio-system
+
+spec:
+  mtls:
+    mode: STRICT

@@ -7,6 +7,10 @@ metadata:
 spec:
   host: app-service-mesh-svc.app-service-mesh.svc.cluster.local
   trafficPolicy:
+    # O cliente fala com o Service usando mTLS, com os certificados emitidos
+    # pelo próprio Istio. Casa com o PeerAuthentication STRICT (infra/mtls.yaml).
+    tls:
+      mode: ISTIO_MUTUAL
     outlierDetection:
       consecutiveGatewayErrors: 1
       interval: 1s
