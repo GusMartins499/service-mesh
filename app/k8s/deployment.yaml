@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: app-service-mesh
-          image: gusmartins499/service-mesh:v1
+          image: gusmartins499/service-mesh:v3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
